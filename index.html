@@ -1,26 +1,26 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<!--(1) This is the head section, where you set the title of the web page, link in any style sheets, 
+	<!--(1) This is the head section, where you set the title of the web page, link in any style sheets,
 	and link to any javascript files/libraries you want to use in the web map-->
-	
-	<!-- (2) Notice how you can use the left angle bracket, exclamation and dashes to break the code and leave comments, 
+
+	<!-- (2) Notice how you can use the left angle bracket, exclamation and dashes to break the code and leave comments,
 	but always make sure to close with two dashes and right angle bracket -->
-	<title>enriqueCostas - Leaflet</title>
+	<title>enriqueCostas</title>
 
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	
+
 	<link rel="shortcut icon" type="image/x-icon" href="docs/images/favicon.ico" />
 
 	<!--(3) style sheets are usually packaged or hosted online, but you could also download this file to your repository and reference it-->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css" integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ==" crossorigin=""/>
-    
+
 	<!--(4) finally in the head, scripts themselves tell the web browser how to handle user-initiated events and draw map features-->
 	<script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js" integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew==" crossorigin=""></script>
 
 
-	
+
 </head>
 <body>
 
@@ -35,21 +35,21 @@
 //    you could actually name this anything "mymap," "kevin," "hammercheese," et cetera, as long as you call it up the same way each time throughout the code
 //(8) note that you might also see "const" used to identify variables in code, when you want a CONSTANT variable. Functionally, these will tend to work similarly in our work.
 // (9) here you define the longitude, latitude, and zoom level of the user map when they load the page, then follow with the tile layer you want (here it is mapbox)
-	
-	
-	var mymap = L.map('mapid').setView([40.8207, -96.7056], 16);
-	L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+
+
+	var mymap = L.map('mapid').setView([40.819273, -96.702968], 16);
+	L.tileLayer('https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
 	maxZoom: 19,
-	attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+	attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Tiles style by <a href="https://www.hotosm.org/" target="_blank">Humanitarian OpenStreetMap Team</a> hosted by <a href="https://openstreetmap.fr/" target="_blank">OpenStreetMap France</a>'
 	}).addTo(mymap);
-//(10) right above here, you see you're adding this tileset and setting the max zoom level of "mymap" 
+//(10) right above here, you see you're adding this tileset and setting the max zoom level of "mymap"
 
 //(11) this is how you define individual features on the map - a marker, a cirlce, a polygon. You could also call up a variable and point it to a hosted GIS file to load it in.
 //(12) note that each popup has preloaded text here. You could also have a variable that points attributes in a dataset to populate a popup; we will do this in the future
-	L.marker([40.819, -96.702968]).addTo(mymap)
+	L.marker([40.819273, -96.702968]).addTo(mymap)
 		.bindPopup("<b>Hello world!</b><br />I open automatically.").openPopup();
 
-	L.circle([40.8207, -96.7056], 200, {"I am a circle."
+	L.circle([40.8207, -96.7056], 200, {
 		color: 'green',
 		fillColor: '#f03',
 		fillOpacity: 0.5
@@ -61,15 +61,16 @@
 		[40.819803, -96.703767],
 		[40.819787, -96.703247],
 		[40.819588, -96.703754],
-		[40.820600, -97.800000]
-	]).addTo(mymap).bindPopup("this is Memorial stadium!");
+		[40.819333, -99.703777]
+	]).addTo(mymap).bindPopup("I am a polygon.");
 	//(14)three nodes - the above code is drawing is a triangle... you can add more nodes to the polygon by separating each with a comma
 
 	//(15)here you could set the attributes of the popup instead of setting each to specific text
-	var popup = L.popup("Love Library");
+	var popup = L.popup();
 
-	
-		var LoveLibrary = {"type": "Feature",
+
+		var LoveLibrary = {
+    "type": "Feature",
     "properties": {
         "name": "Love Library",
         "amenity": "Library",
@@ -80,12 +81,9 @@
         "coordinates": [-96.702572, 40.817804]
     }
 };
-   
-		L.marker([40.817804, -96.702572]).addTo(mymap)
-		.bindPopup("<b>Love Library!</b><br />I open automatically.").openPopup();
 
 //(16) you can also comment out mapped items if you do not want them to draw. note that the var reference above is still present but below i have turned off a layer
-//	L.geoJSON(LoveLibrary,{}).addTo(mymap);
+L.geoJSON(LoveLibrary,{}).addTo(mymap);
 
 //(17) think about how you would write some pop up text into your Love Library layer. Look at how it is done above. Read online help. Ask your neighbor. There are multiple approaches!
 
