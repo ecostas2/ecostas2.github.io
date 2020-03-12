@@ -1,0 +1,101 @@
+<<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no"/>
+  <title>Lab 6 |Joey costas </title>
+  <style> html, body, #viewDiv {padding: 0; margin: 0; height: 100%; width: 100%;} </style>
+  <link rel="stylesheet" href="https://js.arcgis.com/4.14/esri/themes/light/main.css"/>
+  <script src="https://js.arcgis.com/4.14/"></script>
+
+  <script>
+    require([
+          "esri/layers/GeoJSONLayer",
+          "esri/layers/TileLayer",
+          "esri/Map",
+    "esri/views/MapView",
+    "esri/widgets/Legend",
+    "esri/layers/FeatureLayer"
+  ], function(GeoJSONLayer, TileLayer, Map, MapView, Legend, FeatureLayer) {
+
+const url =
+"https://opendata.arcgis.com/datasets/5aa5f17d117f409d8608ec1bf6de06d6_0.geojson";
+
+const renderer = {
+  type: "simple",
+  field: "CNTASSDVAL",
+            legendOptions: {title: "Lab 6 Symbols"},
+        symbol: {
+        type: "simple-marker",
+        color: "red",
+        outline: {
+          color: "White"
+          }
+        },
+          visualVariables: [
+          {
+            type: "size",
+            field: "CNTASSDVAL",
+            stops: [
+              {
+                value: 100000,
+                size: "7px",
+                    label: "Low value"
+                  },
+                  {
+                    value: 500000,
+                    size: "17px",
+                            label: "Medium value"
+                  },
+                  {
+                    value: 1000000,
+                    size: "26px",
+                    label: "High value"
+                  }
+                ]
+              }
+            ]
+          };
+
+const geojsonLayer = new GeoJSONLayer({
+    url: url,
+    copyright: "Joey Costas",
+    renderer: renderer
+     });
+
+var thebasemap = new TileLayer({
+                   url:"https://gisext.lincoln.ne.gov/arcgis/rest/services/GIS/LancoBasemap/MapServer/"
+     });
+
+var map = new Map({
+        layers: [thebasemap, geojsonLayer]
+        });
+
+var featureLayer = new FeatureLayer({
+  url:
+  "https://gisext.lincoln.ne.gov/arcgis/rest/services/Parks/Park_Boundaries/MapServer/0"
+});
+
+var view = new MapView({
+  container: "viewDiv",
+  map: map,
+  zoom: 17,
+  center: [-96.68, 40.81]
+    });
+  const legend = new Legend({
+    view:view,
+    layerInfos: [{
+      layer: geojsonLayer,
+      title: "Lab 6 Symbols"
+    }]
+  });
+
+  map.add(featureLayer);
+  view.ui.add(legend, "bottom-left");
+  });
+
+  </script>
+</head>
+<body>
+  <div id="viewDiv"></div>
+</body>
+</html>
