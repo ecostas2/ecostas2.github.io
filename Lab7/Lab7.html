@@ -1,0 +1,88 @@
+<head>
+  <link rel="stylesheet" href="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v5.3.0/css/ol.css" type="text/css">
+</head>
+<body data-gr-c-s-loaded="true">
+    <div id="map" style="width: 800px; height: 600px;"><div class="ol-viewport" data-view="7" style="position: relative; overflow: hidden; width: 100%; height: 100%; touch-action: none;"><canvas class="ol-unselectable" width="1000" height="750" style="width: 100%; height: 100%; display: block;"></canvas><div class="ol-overlaycontainer"></div><div class="ol-overlaycontainer-stopevent"><div class="ol-overlay-container ol-selectable" style="position: absolute; left: 863px; top: 395px;"><div id="popup" class="ol-popup">
+        <a href="#" id="popup-closer" class="ol-popup-closer"></a>
+        <div id="popup-content"><b>Hello world!</b><br>I am a popup.</div>
+    </div></div><div class="ol-zoom ol-unselectable ol-control"><button class="ol-zoom-in" type="button" title="Zoom in">+</button><button class="ol-zoom-out" type="button" title="Zoom out">−</button></div><div class="ol-rotate ol-unselectable ol-control ol-hidden"><button class="ol-rotate-reset" type="button" title="Reset rotation"><span class="ol-compass" style="transform: rotate(0rad);">⇧</span></button></div><div class="ol-attribution ol-unselectable ol-control ol-uncollapsible"><ul><li>© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors.</li><li>GEOG 417/817 UNL</li></ul><button type="button" title="Attributions"><span>i</span></button></div></div></div></div>
+
+
+    <script src="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v5.3.0/build/ol.js"></script>
+
+    <script>
+
+        var attribution = new ol.control.Attribution({
+            collapsible: false
+        });
+
+        var map = new ol.Map({
+            controls: ol.control.defaults({ attribution: false }).extend([attribution]),
+            layers: [
+                new ol.layer.Tile({
+                    source: new ol.source.OSM({
+                        url: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                        attributions: [ol.source.OSM.ATTRIBUTION, 'GEOG 417/817 UNL'],
+                        maxZoom: 19
+                    })
+                })
+            ],
+            target: 'map',
+            view: new ol.View({
+                center: ol.proj.fromLonLat([-96.6997, 40.8081]),
+                maxZoom: 18,
+                zoom: 14
+            })
+        });
+
+        var layer = new ol.layer.Vector({
+            source: new ol.source.Vector({
+                features: [
+                    new ol.Feature({
+                        geometry: new ol.geom.Point(ol.proj.fromLonLat([-96.6997, 40.8081]))
+                    })
+                ]
+            })
+        });
+        map.addLayer(layer);
+
+        var container = document.getElementById('popup');
+        var content = document.getElementById('popup-content');
+        var closer = document.getElementById('popup-closer');
+
+        var overlay = new ol.Overlay({
+            element: container,
+            autoPan: true,
+            autoPanAnimation: {
+                duration: 250
+            }
+        });
+        map.addOverlay(overlay);
+
+        closer.onclick = function () {
+            overlay.setPosition(undefined);
+            closer.blur();
+            return false;
+        };
+
+        map.on('singleclick', function (event) {
+            if (map.hasFeatureAtPixel(event.pixel) === true) {
+                var coordinate = event.coordinate;
+
+                content.innerHTML = '<b>Welcome!</b><br />The Nebraska State Capitol';
+                overlay.setPosition(coordinate);
+            } else {
+                overlay.setPosition(undefined);
+                closer.blur();
+            }
+        });
+
+        content.innerHTML = '<b>Hello world!</b><br />I am a popup.';
+        overlay.setPosition(ol.proj.fromLonLat([-96.6607, 40.8073]));
+
+    </script>
+
+
+
+</body>
+</html>
