@@ -1,0 +1,89 @@
+<<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no"/>
+  <title>Lab 6 |Joey costas </title>
+  <style> html, body, #viewDiv {padding: 0; margin: 0; height: 100%; width: 100%;} </style>
+  <link rel="stylesheet" href="https://js.arcgis.com/4.14/esri/themes/light/main.css"/>
+  <script src="https://js.arcgis.com/4.14/"></script>
+
+  <script>
+    require([
+          "esri/layers/GeoJSONLayer",
+          "esri/layers/TileLayer",
+          "esri/Map",
+    "esri/views/MapView",
+    "esri/widgets/Legend",
+    "esri/layers/FeatureLayer"
+  ], function(GeoJSONLayer, TileLayer, Map, MapView, Legend, FeatureLayer) {
+
+const url =
+"https://opendata.arcgis.com/datasets/5aa5f17d117f409d8608ec1bf6de06d6_0.geojson";
+
+
+
+const geojsonLayer = new GeoJSONLayer({
+    url: url,
+    copyright: "Joey Costas",
+    renderer: renderer
+     });
+
+var thebasemap = new TileLayer({
+                   url:"https://gisext.lincoln.ne.gov/arcgis/rest/services/GIS/LancoBasemap/MapServer/"
+     });
+
+var map = new Map({
+        layers: [thebasemap, geojsonLayer]
+        });
+
+var featureLayer = new FeatureLayer({
+  url:
+  "https://gisext.lincoln.ne.gov/arcgis/rest/services/Parks/Park_Boundaries/MapServer/0"
+});
+
+var view = new MapView({
+  container: "viewDiv",
+  map: map,
+  zoom: 20,
+  center: [-96.68, 40.81]
+    });
+
+var featurelayer = new featureLayer({
+  url:
+  "https://opendata.arcgis.com/datasets/2594baca9ea14de581a14a8834ab244e_2.geojson"
+
+});
+
+var featurelayer = new featurelayer({
+  url:
+  "https://opendata.arcgis.com/datasets/cf3aa53ff49a4b9f8c32f736d3e05931_1.geojson"
+
+});
+
+var featurelayer = new featurelayer({
+  url:
+  "https://opendata.arcgis.com/datasets/dfa5b08caa3d4a27a2f984671dad77ac_1.geojson"
+
+});
+
+map.add(featureLayer);
+
+
+  const legend = new Legend({
+    view:view,
+    layerInfos: [{
+      layer: geojsonLayer,
+      title: "biketrails"
+    }]
+  });
+
+  map.add(featureLayer);
+  view.ui.add(legend, "bottom-left");
+  });
+
+  </script>
+</head>
+<body>
+  <div id="viewDiv"></div>
+</body>
+</html>
