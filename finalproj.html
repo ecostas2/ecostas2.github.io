@@ -1,89 +1,162 @@
-<<html>
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no"/>
+
+<!-- saved from url=(0064)file:///C:/Users/Enrique/Downloads/ecostasfinaldraft2%20(3).html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+
+
+  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+
   <title>Lab 6 |Joey costas </title>
-  <style> html, body, #viewDiv {padding: 0; margin: 0; height: 100%; width: 100%;} </style>
-  <link rel="stylesheet" href="https://js.arcgis.com/4.14/esri/themes/light/main.css"/>
-  <script src="https://js.arcgis.com/4.14/"></script>
+
+  <style>
+    html,
+    body,
+    #viewDiv {
+      padding: 0;
+      margin: 0;
+      height: 100%;
+      width: 100%;
+    }
+  </style>
+
+
+    <link rel="stylesheet" href="./Lab 6 _Joey costas_files/main.css">
+    <script type="text/javascript" charset="utf-8" src="./Lab 6 _Joey costas_files/dojo_en-us.js.download"></script><script type="text/javascript" charset="utf-8" src="./Lab 6 _Joey costas_files/GeoJSONLayer.js.download"></script><script type="text/javascript" charset="utf-8" src="./Lab 6 _Joey costas_files/TileLayer.js.download"></script><script type="text/javascript" charset="utf-8" src="./Lab 6 _Joey costas_files/MapView.js.download"></script><script type="text/javascript" charset="utf-8" src="./Lab 6 _Joey costas_files/Legend.js.download"></script><script type="text/javascript" charset="utf-8" src="./Lab 6 _Joey costas_files/GeoJSONSource.js.download"></script><script type="text/javascript" charset="utf-8" src="./Lab 6 _Joey costas_files/MapView_en-us.js.download"></script><script type="text/javascript" charset="utf-8" src="./Lab 6 _Joey costas_files/Legend_en-us.js.download"></script><script type="text/javascript" charset="utf-8" src="./Lab 6 _Joey costas_files/webgl.js.download"></script><script type="text/javascript" charset="utf-8" src="./Lab 6 _Joey costas_files/BufferObject.js.download"></script><script type="text/javascript" charset="utf-8" src="./Lab 6 _Joey costas_files/VertexArrayObject.js.download"></script><script type="text/javascript" charset="utf-8" src="./Lab 6 _Joey costas_files/DisjointTimerQuery.js.download"></script><script type="text/javascript" charset="utf-8" src="./Lab 6 _Joey costas_files/FramebufferObject.js.download"></script><script type="text/javascript" charset="utf-8" src="./Lab 6 _Joey costas_files/programUtils.js.download"></script><script type="text/javascript" charset="utf-8" src="./Lab 6 _Joey costas_files/QueryEngineCapabilities.js.download"></script><script type="text/javascript" charset="utf-8" src="./Lab 6 _Joey costas_files/Util.js.download"></script><script type="text/javascript" charset="utf-8" src="./Lab 6 _Joey costas_files/mapViewDeps.js.download"></script><script type="text/javascript" charset="utf-8" src="./Lab 6 _Joey costas_files/TileLayerView2D.js.download"></script><script type="text/javascript" charset="utf-8" src="./Lab 6 _Joey costas_files/FeatureLayerView2D.js.download"></script><script type="text/javascript" charset="utf-8" src="./Lab 6 _Joey costas_files/SymbolTileRenderer.js.download"></script><script src="./Lab 6 _Joey costas_files/saved_resource"></script>
+
 
   <script>
+
     require([
-          "esri/layers/GeoJSONLayer",
-          "esri/layers/TileLayer",
-          "esri/Map",
-    "esri/views/MapView",
-    "esri/widgets/Legend",
-    "esri/layers/FeatureLayer"
-  ], function(GeoJSONLayer, TileLayer, Map, MapView, Legend, FeatureLayer) {
 
-const url =
-"https://opendata.arcgis.com/datasets/5aa5f17d117f409d8608ec1bf6de06d6_0.geojson";
+      "esri/layers/GeoJSONLayer",
+
+      "esri/layers/TileLayer",
+
+      "esri/Map",
+
+      "esri/views/MapView",
+
+      "esri/widgets/Legend",
+
+      "esri/layers/FeatureLayer"
+
+    ], function (GeoJSONLayer, TileLayer, Map, MapView, Legend, FeatureLayer) {
+
+
+   //   const busurl = "https://opendata.arcgis.com/datasets/cf3aa53ff49a4b9f8c32f736d3e05931_1.geojson";
+	//	const busurl = "https://ags3.lincoln.ne.gov/arcgis/rest/services/StarTran/StarTran_StopDetail/MapServer/1";
+
+      var thebasemap = new TileLayer({
+        url: "https://services.arcgisonline.com/arcgis/rest/services/World_Street_Map/MapServer"
+      });
+	  
+	  const busStopTemplate = {
+          title: "{Route}",
+          content: "This is route {Route}",
+          fieldInfos: [
+            {
+              fieldName: "time",
+              format: {
+                dateFormat: "short-date-short-time"
+              }
+            }
+          ]
+        };
+
+	  var busStopRenderer = {
+          type: "simple",
+  //        field: "CNTASSDVAL",
+		  legendOptions: {
+		  title: "Assessed values in Lincoln"},
+          symbol: {
+            type: "simple-marker",
+            color: "red",
+            outline: {
+              color: "black"
+            }
+          }
+        };
+		
+
+
+      var busStopLayer = new FeatureLayer({
+        url: "https://ags3.lincoln.ne.gov/arcgis/rest/services/StarTran/StarTran_StopDetail/MapServer/1/",
+		popupTemplate: busStopTemplate,
+		renderer: busStopRenderer
+      });
+
+     // map.add(busStopLayer);
+
+
+      var futureTrailsLayer = new FeatureLayer({
+        url: "https://ags3.lincoln.ne.gov/arcgis/rest/services/Planning/bikeLayersNCS/MapServer/1",
+   //     fillColor: "#OE4D92",
+    //    color: '#OE4D92'
+	//REMEMEBR THAT YOU NEED TO USE RENDERERS FOR THESE
+      });
+
+      var featureLayer = new FeatureLayer({
+
+        url: "https://gisext.lincoln.ne.gov/arcgis/rest/services/Parks/Park_Boundaries/MapServer/0"
+
+      });
+
+
+      var map = new Map({
+
+        layers: [thebasemap, busStopLayer, futureTrailsLayer, featureLayer]
+
+      });
 
 
 
-const geojsonLayer = new GeoJSONLayer({
-    url: url,
-    copyright: "Joey Costas",
-    renderer: renderer
-     });
+      var view = new MapView({
 
-var thebasemap = new TileLayer({
-                   url:"https://gisext.lincoln.ne.gov/arcgis/rest/services/GIS/LancoBasemap/MapServer/"
-     });
+        container: "viewDiv",
+        map: map,
+        zoom: 12,
+        center: [-96.68, 40.81]
 
-var map = new Map({
-        layers: [thebasemap, geojsonLayer]
-        });
+      });
 
-var featureLayer = new FeatureLayer({
-  url:
-  "https://gisext.lincoln.ne.gov/arcgis/rest/services/Parks/Park_Boundaries/MapServer/0"
-});
+//      var streetTrailsLayer = new GeoJSONLayer({
 
-var view = new MapView({
-  container: "viewDiv",
-  map: map,
-  zoom: 20,
-  center: [-96.68, 40.81]
+//        url: "https://opendata.arcgis.com/datasets/2594baca9ea14de581a14a8834ab244e_2.geojson",
+
+ //       fillColor: "#OE4D92",
+
+//        color: '#OE4D92'
+
+ //     });
+
+     // map.add(streetTrailsLayer);
+
+
+
+      const legend = new Legend({
+
+        view: view,
+        layerInfos: [{
+          layer: futureTrailsLayer,
+          title: "biketrails , busStopLayer"
+
+        }]
+      });
+
+      view.ui.add(legend, "bottom-left");
+
     });
 
-var featurelayer = new featureLayer({
-  url:
-  "https://opendata.arcgis.com/datasets/2594baca9ea14de581a14a8834ab244e_2.geojson"
-
-});
-
-var featurelayer = new featurelayer({
-  url:
-  "https://opendata.arcgis.com/datasets/cf3aa53ff49a4b9f8c32f736d3e05931_1.geojson"
-
-});
-
-var featurelayer = new featurelayer({
-  url:
-  "https://opendata.arcgis.com/datasets/dfa5b08caa3d4a27a2f984671dad77ac_1.geojson"
-
-});
-
-map.add(featureLayer);
-
-
-  const legend = new Legend({
-    view:view,
-    layerInfos: [{
-      layer: geojsonLayer,
-      title: "biketrails"
-    }]
-  });
-
-  map.add(featureLayer);
-  view.ui.add(legend, "bottom-left");
-  });
-
   </script>
+
 </head>
+
 <body>
-  <div id="viewDiv"></div>
-</body>
-</html>
+
+  <div id="viewDiv" class="esri-view esri-view-width-xlarge esri-view-width-greater-than-xsmall esri-view-width-greater-than-small esri-view-width-greater-than-medium esri-view-width-greater-than-large esri-view-height-small esri-view-height-greater-than-xsmall esri-view-height-less-than-medium esri-view-height-less-than-large esri-view-height-less-than-xlarge esri-view-orientation-landscape esri-view-width-small esri-view-width-less-than-medium esri-view-width-less-than-large esri-view-width-less-than-xlarge"><div class="esri-view-root"><div class="esri-view-surface esri-view-surface--inset-outline esri-view-surface--touch-none" role="application" tabindex="0" data-interacting="false"><canvas style="width: 768px; height: 691px; display: block;" width="960" height="864"></canvas></div><div class="esri-overlay-surface"><div style="visibility: hidden;"></div></div><div class="esri-ui" style="top: 0px; bottom: 0px; left: 0px; right: 0px;"><div class="esri-ui-inner-container esri-ui-corner-container" style="top: 15px; bottom: 30px; left: 15px; right: 15px;"><div class="esri-ui-top-left esri-ui-corner"><div class="esri-component esri-zoom esri-widget"><div class="esri-widget--button esri-widget esri-interactive" role="button" tabindex="0" title="Zoom in"><span aria-hidden="true" role="presentation" class="esri-icon esri-icon-plus"></span><span class="esri-icon-font-fallback-text">Zoom in</span></div><div class="esri-widget--button esri-widget esri-interactive" role="button" tabindex="0" title="Zoom out"><span aria-hidden="true" role="presentation" class="esri-icon esri-icon-minus"></span><span class="esri-icon-font-fallback-text">Zoom out</span></div></div></div><div class="esri-ui-top-right esri-ui-corner"></div><div class="esri-ui-bottom-left esri-ui-corner"><div class="esri-component esri-legend esri-widget--panel esri-widget"><div class="esri-legend__service"><h3 class="esri-widget__heading esri-legend__service-label">biketrails , busStopLayer</h3><div class="esri-legend__layer"><div class="esri-legend__layer-table esri-legend__layer-table--size-ramp"><div class="esri-legend__layer-body"><div class="esri-legend__layer-row"><div class="esri-legend__layer-cell esri-legend__layer-cell--symbols"><div class="esri-legend__symbol"><div style="opacity: 1;"><svg xmlns="http://www.w3.org/2000/svg" width="40" height="3"><defs></defs><g transform="matrix(0.9375,0,0,0.9375,1.25,-0.9999999403953552)"><path fill="none" fill-rule="evenodd" stroke="rgba(115, 178, 255, 1)" stroke-width="2.6666666666666665" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" stroke-miterlimit="4" d="M 0 2.6666666666666665 L 40 2.6666666666666665"></path></g></svg></div></div></div><div class="esri-legend__layer-cell esri-legend__layer-cell--info"></div></div></div></div></div></div></div></div><div class="esri-ui-bottom-right esri-ui-corner"></div></div><div class="esri-ui-inner-container esri-ui-manual-container"><div class="esri-component esri-attribution esri-widget"><div class="esri-attribution__sources esri-interactive" tabindex="0" role="button">Esri, HERE, Garmin, NGA, USGS, NPS | Lincoln/Lancaster County Planning Department</div><div class="esri-attribution__powered-by">Powered by <a class="esri-attribution__link esri-widget__anchor" href="http://www.esri.com/" target="_blank" rel="noreferrer">Esri</a></div></div><div class="esri-component esri-popup" role="presentation"></div><div class="esri-component esri-spinner"></div></div></div></div><div class="esri-view-user-storage"><div class="esri-view-root"><div class="esri-view-surface esri-view-surface--inset-outline esri-view-surface--touch-none" role="application" tabindex="0" data-interacting="false"><canvas style="width: 1536px; height: 706px; display: block;" width="1920" height="883"></canvas></div><div class="esri-overlay-surface"><div style="visibility: hidden;"></div></div><div class="esri-ui" style="top: 0px; bottom: 0px; left: 0px; right: 0px;"><div class="esri-ui-inner-container esri-ui-corner-container" style="top: 15px; bottom: 30px; left: 15px; right: 15px;"><div class="esri-ui-top-left esri-ui-corner"><div class="esri-component esri-zoom esri-widget"><div class="esri-widget--button esri-widget esri-interactive" role="button" tabindex="0" title="Zoom in"><span aria-hidden="true" role="presentation" class="esri-icon esri-icon-plus"></span><span class="esri-icon-font-fallback-text">Zoom in</span></div><div class="esri-widget--button esri-widget esri-interactive" role="button" tabindex="0" title="Zoom out"><span aria-hidden="true" role="presentation" class="esri-icon esri-icon-minus"></span><span class="esri-icon-font-fallback-text">Zoom out</span></div></div></div><div class="esri-ui-top-right esri-ui-corner"></div><div class="esri-ui-bottom-left esri-ui-corner"><div class="esri-component esri-legend esri-widget--panel esri-widget"><div class="esri-legend__service"><h3 class="esri-widget__heading esri-legend__service-label">biketrails</h3><div class="esri-legend__layer"><div class="esri-legend__layer-table esri-legend__layer-table--size-ramp"><div class="esri-legend__layer-body"><div class="esri-legend__layer-row"><div class="esri-legend__layer-cell esri-legend__layer-cell--symbols"><div class="esri-legend__symbol"><div style="opacity: 1;"><svg xmlns="http://www.w3.org/2000/svg" width="40" height="1"><defs></defs><g transform="matrix(0.9756097793579102,0,0,0.9756097793579102,0.4878048896789551,-0.47560977935791016)"><path fill="none" fill-rule="evenodd" stroke="rgba(252, 146, 31, 1)" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" stroke-miterlimit="4" d="M 0 1 L 40 1"></path></g></svg></div></div></div><div class="esri-legend__layer-cell esri-legend__layer-cell--info"></div></div></div></div></div></div></div></div><div class="esri-ui-bottom-right esri-ui-corner"></div></div><div class="esri-ui-inner-container esri-ui-manual-container"><div class="esri-component esri-attribution esri-widget"><div class="esri-attribution__sources esri-interactive" tabindex="0" role="button">Esri, HERE, Garmin, NGA, USGS, NPS | Joey Costas</div><div class="esri-attribution__powered-by">Powered by <a class="esri-attribution__link esri-widget__anchor" href="http://www.esri.com/" target="_blank" rel="noreferrer">Esri</a></div></div><div class="esri-component esri-popup" role="presentation"></div><div class="esri-component esri-spinner"></div></div></div></div><div class="esri-view-user-storage"></div></div></div>
+ <div class="leaflet-popup  leaflet-zoom-animated" style="opacity: 1; transform: translate3d(401px, 266px, 0px); bottom: -7px; left: -75px;">
+    
+
+
+
+</div></body></html>
